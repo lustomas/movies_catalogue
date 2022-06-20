@@ -8,9 +8,14 @@ app = Flask(__name__)
 def homepage():
     selected_list = request.args.get('list_type', "popular")
 
-    movie_types = ["top_rated", "upcoming", "popular", "now_playing"]
+    movie_types = {
+        "top_rated": "Top rated", 
+        "upcoming": "Upcoming", 
+        "popular": "Popular", 
+        "now_playing": "Now playing"
+    }
     
-    if selected_list not in movie_types:
+    if selected_list not in movie_types.keys():
         selected_list = "popular"
         
     movies = tmdb_client.get_movies(how_many=8, list_type=selected_list)
@@ -20,8 +25,6 @@ def homepage():
 def utility_processor():
     def tmdb_image_url(path, size):
         return tmdb_client.get_poster_url(path, size)
-
-    
 
     return {"tmdb_image_url": tmdb_image_url}
 
